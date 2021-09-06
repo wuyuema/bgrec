@@ -1,0 +1,5 @@
+运行与编译依赖于numpy与openCV
+
+如果运行时报告缺少上述库，请分别运行：
+pip3 install opencv-python
+pip3 install numpy scipy
