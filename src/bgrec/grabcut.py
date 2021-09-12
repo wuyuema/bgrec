@@ -42,7 +42,7 @@ class grab_cut:
         sho2 = mask2.copy()
         _, sho2 = cv.threshold(sho, 0, 1, cv.THRESH_BINARY_INV)
         # cv.imshow('mask2', sho)
-        cv.imshow('mask3', sho2)
+        # cv.imshow('mask3', sho2)
         return self.__gc, sho2
 
     def __expand_mask(self, xor_dil):

@@ -2,6 +2,7 @@ import cv2 as cv
 import numpy as np
 import sys
 import time
+import os
 
 import bgrec
 import listcam
@@ -77,7 +78,7 @@ if __name__ == '__main__':
         # 用户交互选择相机
         while True:
             cam = input(
-                'Please input the camera id (available cameras: {}): '.format(cams[:-1]))
+                'Please input the video file path, or the camera id (available cameras: {}): '.format(cams[:-1]))
             try:
                 if (int(cam) == eval(cam) and int(cam) < len(cams)):
                     cam = int(cam)
@@ -93,14 +94,15 @@ if __name__ == '__main__':
                         else:
                             continue
             except:
-                while True:
-                    buf = input('Illegal input. Need to input again? (y/n): ')
-                    if (buf == 'y' or buf == 'Y'):
-                        break
-                    elif (buf == 'n' or buf == 'N'):
-                        sys.exit()
-                    else:
-                        continue
+                if not (os.path.isfile(cam)):
+                    while True:
+                        buf = input('Illegal input. Need to input again? (y/n): ')
+                        if (buf == 'y' or buf == 'Y'):
+                            break
+                        elif (buf == 'n' or buf == 'N'):
+                            sys.exit()
+                        else:
+                            continue
 
         return cam
 
@@ -125,18 +127,27 @@ if __name__ == '__main__':
     tot_dil = dark_canvas.copy()
 
     # 特殊操作时点
-    d_time = 1.2
+    buf = input('Please give a execute time, if you don\'t know what to do, press enter: ')
+    if (buf == ''):
+        d_time = 3
+    else:
+        d_time = eval(buf)
     s_time = time.time()
 
     # 最终答案格式
     cntmask = np.zeros((height, width), np.uint64)
     res = np.zeros((height, width, 3), np.uint8)
+    cnt = 0
 
     # 函数主循环
     while (cap.isOpened()):
         # 按下q退出
-        if (getcvinput(tpf) == 'q'):
+        buf = getcvinput(tpf)
+        if (buf == 'q'):
             break
+        elif (buf == 's'):
+            cnt += 1
+            cv.imwrite('../res/{}.jpg'.format(cnt), res)
 
         # 执行每帧更新
         tot_dil += on_frame_upd(cap)

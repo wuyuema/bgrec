@@ -13,8 +13,12 @@ def shrink(src, pixnum):
             areatot = 0
             for ii in range(i * pixnum, (i + 1) * pixnum):
                 for ij in range(j * pixnum, (j + 1) * pixnum):
-                    areatot += src[ii, ij]
-            if areatot != 0:
+                    if src[ii, ij] > 0:
+                        areatot = 1
+                        break
+                if areatot > 0:
+                    break
+            if areatot > 0:
                 res[i, j] = 255
     return res
 
